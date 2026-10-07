@@ -1,12 +1,53 @@
-const CACHE='polaris-recipes-v3';
-const ASSETS=['./','./index.html','./styles.css','./app.js','./manifest.webmanifest'];
-self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting())));
-self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
-self.addEventListener('fetch',event=>{
-  const url=new URL(event.request.url);
-  if(url.pathname.endsWith('/data/recipes.json')){
-    event.respondWith(fetch(event.request,{cache:'no-store'}).then(r=>{const copy=r.clone();caches.open(CACHE).then(c=>c.put('./data/recipes.json',copy));return r}).catch(()=>caches.match('./data/recipes.json')));
+const CACHE = 'kitchenrecipe-v4';
+const BASE = self.registration.scope;
+const ASSETS = [
+  BASE,
+  BASE + 'index.html',
+  BASE + 'styles.css',
+  BASE + 'app.js',
+  BASE + 'manifest.webmanifest'
+];
+
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE)
+      .then(cache => cache.addAll(ASSETS))
+      .then(() => self.skipWaiting())
+  );
+});
+
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys()
+      .then(keys => Promise.all(
+        keys.filter(key => key !== CACHE).map(key => caches.delete(key))
+      ))
+      .then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener('fetch', event => {
+  if (event.request.method !== 'GET') return;
+
+  const url = new URL(event.request.url);
+  const recipesUrl = new URL('data/recipes.json', BASE);
+
+  if (url.href === recipesUrl.href) {
+    event.respondWith(
+      fetch(event.request, { cache: 'no-store' })
+        .then(response => {
+          if (response.ok) {
+            const copy = response.clone();
+            caches.open(CACHE).then(cache => cache.put(event.request, copy));
+          }
+          return response;
+        })
+        .catch(() => caches.match(event.request))
+    );
     return;
   }
-  event.respondWith(caches.match(event.request).then(r=>r||fetch(event.request)));
+
+  event.respondWith(
+    caches.match(event.request).then(cached => cached || fetch(event.request))
+  );
 });

@@ -248,7 +248,9 @@ function registerSW() {
 
 async function init() {
   try {
-    const response = await fetch('./data/recipes.json?v=' + Date.now(), { cache: 'no-store' });
+    const base = new URL('.', document.baseURI);
+    const recipesUrl = new URL('data/recipes.json?v=' + Date.now(), base);
+    const response = await fetch(recipesUrl.href, { cache: 'no-store' });
     if (!response.ok) throw new Error('HTTP ' + response.status);
     const data = await response.json();
     state.recipes = Array.isArray(data.recipes) ? data.recipes : [];
@@ -263,7 +265,7 @@ async function init() {
     document.body.classList.add('ready');
   } catch (e) {
     console.error(e);
-    $('#recipeList').innerHTML = empty('Не удалось загрузить базу рецептов.');
+    $('#recipeList').innerHTML = empty('Не удалось загрузить базу. Проверьте, что data/recipes.json загружен в репозиторий рядом с index.html. Ошибка: ' + (e.message || e));
   }
 }
 
