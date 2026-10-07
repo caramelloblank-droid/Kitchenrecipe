@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<meta name="description" content="Рецепты для Polaris PMC 0517 Expert">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="styles.css">
+<title>Polaris Recipes</title>
+</head>
+<body>
+<header class="topbar">
+  <div><div class="eyebrow">POLARIS PMC 0517 EXPERT</div><h1>Рецепты</h1></div>
+  <button id="favoritesBtn" class="icon-btn" aria-label="Избранное">☆<span id="favCount" class="badge">0</span></button>
+</header>
+<main id="app">
+  <section id="homeView" class="view active">
+    <div class="search-wrap"><input id="searchInput" type="search" placeholder="Поиск рецепта или ингредиента…" autocomplete="off"></div>
+    <div class="quick-actions">
+      <button class="action-card" data-action="ingredients"><b>🥕 Подобрать по продуктам</b><small>Что можно приготовить из того, что есть</small></button>
+      <button class="action-card" data-action="index"><b>☷ Предметный указатель</b><small>Все ингредиенты и количество рецептов</small></button>
+    </div>
+    <div class="section-head"><h2>Категории</h2><button id="allRecipesBtn" class="text-btn">Все</button></div>
+    <div id="categories" class="chips"></div>
+    <div class="section-head"><h2 id="resultsTitle">Все рецепты</h2><span id="resultsCount" class="muted"></span></div>
+    <div id="recipeList" class="recipe-list"></div>
+  </section>
+
+  <section id="ingredientsView" class="view">
+    <div class="view-head"><button class="back-btn" data-back>‹</button><h2>Подбор по продуктам</h2></div>
+    <p class="muted">Выберите продукты. Рецепты с меньшим количеством недостающих ингредиентов будут выше.</p>
+    <input id="ingredientSearch" class="search-input" type="search" placeholder="Найти ингредиент…">
+    <div class="filter-row"><button id="clearIngredients" class="text-btn">Сбросить</button><span id="selectedCount" class="muted"></span></div>
+    <div id="ingredientFilter" class="ingredient-filter"></div>
+    <div class="section-head"><h2>Подходящие рецепты</h2><span id="matchCount" class="muted"></span></div>
+    <div id="ingredientResults" class="recipe-list"></div>
+  </section>
+
+  <section id="indexView" class="view">
+    <div class="view-head"><button class="back-btn" data-back>‹</button><h2>Предметный указатель</h2></div>
+    <input id="indexSearch" class="search-input" type="search" placeholder="Найти ингредиент…">
+    <div id="subjectIndex"></div>
+  </section>
+
+  <section id="favoritesView" class="view">
+    <div class="view-head"><button class="back-btn" data-back>‹</button><h2>Избранное</h2></div>
+    <div id="favoritesList" class="recipe-list"></div>
+  </section>
+
+  <section id="recipeView" class="view">
+    <div class="recipe-toolbar"><button class="back-btn" id="recipeBack">‹</button><button id="favoriteRecipe" class="icon-btn large">☆</button></div>
+    <article id="recipeCard"></article>
+  </section>
+
+  <section id="cookView" class="view">
+    <div class="cook-toolbar"><button class="back-btn" id="cookBack">‹</button><div><small>ГОТОВИМ</small><strong id="cookTitle"></strong></div><span id="cookProgress">1 / 1</span></div>
+    <div id="cookStep" class="cook-step"></div>
+    <div class="cook-controls"><button id="prevStep" class="secondary-btn">←</button><button id="stepDone" class="primary-btn">Готово ✓</button><button id="nextStep" class="secondary-btn">→</button></div>
+    <div id="cookDots" class="dots"></div>
+    <p class="swipe-hint">Свайп влево/вправо для смены шага</p>
+  </section>
+</main>
+<nav class="bottom-nav">
+  <button class="nav-item active" data-nav="homeView">⌂<span>Главная</span></button>
+  <button class="nav-item" data-nav="ingredientsView">🥕<span>Продукты</span></button>
+  <button class="nav-item" data-nav="indexView">☷<span>Указатель</span></button>
+  <button class="nav-item" data-nav="favoritesView">☆<span>Избранное</span></button>
+</nav>
+<script src="app.js"></script>
+</body>
+</html>
